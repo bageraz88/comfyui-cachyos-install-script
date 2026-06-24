@@ -335,6 +335,9 @@ install_python_requirements() {
     log "Installing PyTorch with ROCm support from $rocm_url"
     run_cmd "$venv_python" -m pip install --force-reinstall --no-deps torch torchvision torchaudio --index-url "$rocm_url"
   fi
+
+  log "Installing ComfyUI CLI"
+  run_cmd "$venv_python" -m pip install comfy-cli
 }
 
 create_launcher() {
@@ -499,6 +502,7 @@ main() {
   create_desktop_shortcut
   log "Installation complete"
   log "Run: $INSTALL_DIR/run-comfyui.sh"
+  log "CLI: $INSTALL_DIR/venv/bin/comfy --help"
   if (( CREATE_SHORTCUT )); then
     log "Desktop shortcut: $HOME/.local/share/applications/comfyui.desktop"
   fi
