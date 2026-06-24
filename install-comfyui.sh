@@ -340,6 +340,23 @@ install_python_requirements() {
   run_cmd "$venv_python" -m pip install comfy-cli
 }
 
+install_comfyui_manager() {
+  local manager_dir="$INSTALL_DIR/ComfyUI/custom_nodes/ComfyUI-Manager"
+  local venv_python="$INSTALL_DIR/venv/bin/python"
+
+  if [ -d "$manager_dir/.git" ]; then
+    log "Updating ComfyUI-Manager"
+    run_cmd git -C "$manager_dir" pull --ff-only
+  else
+    log "Installing ComfyUI-Manager"
+    run_cmd git clone https://github.com/ltdrdata/ComfyUI-Manager.git "$manager_dir"
+  fi
+
+  if [ -f "$manager_dir/requirements.txt" ]; then
+    run_cmd "$venv_python" -m pip install -r "$manager_dir/requirements.txt"
+  fi
+}
+
 create_launcher() {
   local launcher="$INSTALL_DIR/run-comfyui.sh"
   local gpu_var=""
@@ -498,6 +515,7 @@ main() {
   clone_or_update_repo
   setup_virtualenv
   install_python_requirements
+  install_comfyui_manager
   create_launcher
   create_desktop_shortcut
   log "Installation complete"
