@@ -42,4 +42,4 @@
 ## Notes
 - Prioritize a simple, reliable script for CachyOS/Arch and Ubuntu/Debian-style systems.
 - Keep the script interactive by default, but make automation possible with `--yes`.
-- ROCm version defaults to 6.2; override with `export ROCM_VERSION=6.1`.
+- ROCm version defaults to 6.3; override with `export ROCM_VERSION=6.2`.
