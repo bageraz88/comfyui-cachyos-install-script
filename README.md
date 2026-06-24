@@ -1,6 +1,6 @@
 # ComfyUI Linux Install Script
 
-A beginner-friendly installer for [ComfyUI](https://github.com/comfyanonymous/ComfyUI) — an AI image generation tool. Works on **NVIDIA** and **AMD** GPUs.
+A beginner-friendly installer for [ComfyUI](https://github.com/comfyanonymous/ComfyUI) — an AI image generation tool. **Designed for dual-GPU systems with a discrete AMD GPU.** Not tested with NVIDIA GPUs. NVIDIA users are welcome to adapt the script — see [Contributing](#contributing).
 
 ## What you need
 
