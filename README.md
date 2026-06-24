@@ -92,7 +92,7 @@ ComfyUI starts a web server. Open your browser and go to **http://127.0.0.1:8188
 
 > If the page doesn't load, wait a few seconds and refresh. ComfyUI downloads models on first run which can take a moment.
 
-### Browser GPU acceleration (optional but recommended)
+### Dual GPU Browser Acceleration
 
 For smoother image generation in the browser, enable GPU acceleration in your Chromium-based browser:
 
