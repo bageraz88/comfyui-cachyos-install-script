@@ -158,3 +158,36 @@ The script:
 4. Downloads ComfyUI from GitHub
 5. Installs Python libraries (PyTorch, etc.) — uses the ROCm version if AMD GPU is detected
 6. Creates a launcher script and desktop shortcut
+
+## Contributing
+
+Contributions are welcome! Here's how you can help:
+
+### Report issues
+
+If you find a bug or have a feature request, [open an issue](https://github.com/bageraz88/comfyui-cachyos-install-script/issues). Include:
+- Your Linux distribution and version
+- Your GPU model (NVIDIA/AMD)
+- The terminal output from the script (with `--dry-run` if possible)
+
+### Submit changes
+
+1. Fork the repository
+2. Create a branch: `git checkout -b my-feature`
+3. Make your changes
+4. Test with `bash -n install-comfyui.sh` to verify syntax
+5. Commit and push to your fork
+6. Open a pull request
+
+### Development tips
+
+- Run `bash install-comfyui.sh --help` to see all options
+- Use `--dry-run --yes` to test logic without sudo prompts or file changes
+- The script follows POSIX-friendly bash — avoid bashisms where possible
+- Keep the script self-contained (no external dependencies beyond standard Linux tools)
+
+## License
+
+This project is licensed under the **MIT License**.
+
+The `comfyui.svg` icon is derived from the ComfyUI logo and is the property of [Comfyanonymous](https://github.com/comfyanonymous/ComfyUI). All rights to the original logo belong to its respective owner.
