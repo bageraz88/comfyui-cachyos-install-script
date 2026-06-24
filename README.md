@@ -161,7 +161,7 @@ This deletes the ComfyUI folder, the launcher, and the desktop shortcut.
 | `INSTALL_DIR` | `~/comfyui` | Where ComfyUI gets installed |
 | `REPO_URL` | ComfyUI GitHub | Where to download ComfyUI from |
 | `LOG_FILE` | `~/comfyui-install.log` | Where install logs are saved |
-| `ROCM_VERSION` | auto-detected | AMD ROCm version for PyTorch (override with `export ROCM_VERSION=6.3`) |
+| `ROCM_VERSION` | auto-detected | AMD ROCm version for PyTorch (override with `export ROCM_VERSION=6.2`) |
 
 ## Supported Linux distributions
 
