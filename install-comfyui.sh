@@ -104,10 +104,10 @@ check_root() {
 }
 
 detect_gpu_type() {
-  # Source ROCm profile so rocm-smi is on PATH for non-login shells
-  if [ -f /etc/profile.d/rocm.sh ]; then
-    # shellcheck source=/dev/null
-    . /etc/profile.d/rocm.sh
+  # Add ROCm to PATH for non-login shells (rocm.sh uses append_path which
+  # is only defined in /etc/profile for login shells)
+  if [ -d /opt/rocm/bin ]; then
+    PATH="/opt/rocm/bin:$PATH"
   fi
 
   # Check actual hardware via lspci first (more reliable than driver presence)
