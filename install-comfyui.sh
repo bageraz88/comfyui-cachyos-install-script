@@ -405,7 +405,7 @@ set -euo pipefail
 cd "$INSTALL_DIR/ComfyUI"
 EOF_LAUNCHER
 
-  if [ -n "$gpu_var" ]; then
+  if [ -n "$gpu_var" ] && [ "$GPU_SELECTION" != "auto" ]; then
     cat >> "$launcher" <<EOF_LAUNCHER
 export $gpu_var="$GPU_SELECTION"
 EOF_LAUNCHER
