@@ -92,6 +92,18 @@ ComfyUI starts a web server. Open your browser and go to **http://127.0.0.1:8188
 
 > If the page doesn't load, wait a few seconds and refresh. ComfyUI downloads models on first run which can take a moment.
 
+### Browser GPU acceleration (optional but recommended)
+
+For smoother image generation in the browser, enable GPU acceleration in your Chromium-based browser:
+
+```bash
+cp Chromium-based-Browser-flags.conf ~/.config/
+```
+
+Replace `Chromium-based-Browser` with your actual browser name (e.g., `chrome`, `brave`, `ungoogled-chromium`, `microsoft-edge`).
+
+**Reference:** [CachyOS wiki — Enabling hardware acceleration in Google Chrome](https://wiki.cachyos.org/configuration/enabling_hardware_acceleration_in_google_chrome/)
+
 ## Want to customize the install?
 
 | I want to... | Command |
