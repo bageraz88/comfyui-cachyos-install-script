@@ -58,7 +58,9 @@ The script will:
 - Install any missing system packages (asks for your password via sudo)
 - Create a Python virtual environment
 - Download ComfyUI
-- Install all Python dependencies
+- Install all Python dependencies (ROCm PyTorch for AMD GPUs)
+- Install ComfyUI-Manager (custom node manager)
+- Install ComfyUI CLI (`comfy` command)
 - Create a desktop shortcut (so you can find ComfyUI in your app menu)
 
 > It will prompt you for your **sudo password** to install system packages, and ask **y/n** questions throughout. To skip all prompts, add `--yes`.
@@ -67,9 +69,14 @@ The script will:
 
 After installation completes, launch ComfyUI:
 
-**From the terminal:**
+**From the terminal (launcher):**
 ```bash
 ~/comfyui/run-comfyui.sh
+```
+
+**From the terminal (CLI):**
+```bash
+~/comfyui/venv/bin/comfy launch
 ```
 
 **From your app menu:** Search for "ComfyUI" — a shortcut was added automatically.
@@ -96,6 +103,8 @@ ComfyUI starts a web server. Open your browser and go to **http://127.0.0.1:8188
 | Skip prompts (auto mode) | `bash install-comfyui.sh --yes` |
 | Skip desktop shortcut | `bash install-comfyui.sh --no-shortcut` |
 | Only preview (no changes) | `bash install-comfyui.sh --dry-run` |
+| Use ComfyUI CLI | `~/comfyui/venv/bin/comfy --help` |
+| Install more custom nodes | `~/comfyui/venv/bin/comfy node install <node-name>` |
 
 ## Troubleshooting
 
@@ -157,7 +166,9 @@ The script:
 3. Creates an isolated Python environment (venv)
 4. Downloads ComfyUI from GitHub
 5. Installs Python libraries (PyTorch, etc.) — uses the ROCm version if AMD GPU is detected
-6. Creates a launcher script and desktop shortcut
+6. Installs ComfyUI-Manager and its dependencies
+7. Installs ComfyUI CLI (`comfy-cli`)
+8. Creates a launcher script and desktop shortcut
 
 ## Contributing
 
