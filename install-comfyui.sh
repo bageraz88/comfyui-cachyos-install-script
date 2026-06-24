@@ -328,13 +328,13 @@ install_python_requirements() {
 
   run_cmd "$venv_python" -m pip install --upgrade pip setuptools wheel
 
+  run_cmd "$venv_python" -m pip install -r "$repo_dir/requirements.txt"
+
   if [ "$GPU_TYPE" = "amd" ]; then
     local rocm_url="https://download.pytorch.org/whl/rocm${ROCM_VERSION}"
     log "Installing PyTorch with ROCm support from $rocm_url"
-    run_cmd "$venv_python" -m pip install torch torchvision torchaudio --index-url "$rocm_url"
+    run_cmd "$venv_python" -m pip install --force-reinstall --no-deps torch torchvision torchaudio --index-url "$rocm_url"
   fi
-
-  run_cmd "$venv_python" -m pip install -r "$repo_dir/requirements.txt"
 }
 
 create_launcher() {
