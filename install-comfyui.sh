@@ -104,9 +104,28 @@ check_root() {
 }
 
 detect_gpu_type() {
-  if command -v nvidia-smi >/dev/null 2>&1; then
+  # Source ROCm profile so rocm-smi is on PATH for non-login shells
+  if [ -f /etc/profile.d/rocm.sh ]; then
+    # shellcheck source=/dev/null
+    . /etc/profile.d/rocm.sh
+  fi
+
+  # Check actual hardware via lspci first (more reliable than driver presence)
+  local has_amd_hw=false
+  if command -v lspci >/dev/null 2>&1; then
+    if lspci | grep -qiE "(vga|3d|display).*amd|advanced micro devices"; then
+      has_amd_hw=true
+    fi
+  fi
+
+  # Prefer driver-based detection, but respect hardware info
+  if $has_amd_hw && (command -v rocm-smi >/dev/null 2>&1 || [ -x /opt/rocm/bin/rocm-smi ]); then
+    GPU_TYPE="amd"
+  elif command -v nvidia-smi >/dev/null 2>&1; then
     GPU_TYPE="nvidia"
-  elif command -v rocm-smi >/dev/null 2>&1; then
+  elif $has_amd_hw; then
+    GPU_TYPE="amd"
+  elif command -v rocm-smi >/dev/null 2>&1 || [ -x /opt/rocm/bin/rocm-smi ]; then
     GPU_TYPE="amd"
   elif command -v lspci >/dev/null 2>&1; then
     if lspci | grep -qiE "(vga|3d|display).*amd|advanced micro devices"; then
@@ -137,8 +156,17 @@ detect_rocm_version() {
     ROCM_VERSION="${ver%%.*}.$(echo "$ver" | cut -d. -f2)"
     log "Detected ROCm version: $ROCM_VERSION"
   else
-    ROCM_VERSION="6.3"
-    log "Could not detect ROCm version, using default: $ROCM_VERSION"
+    if [ -d /opt/rocm ]; then
+      local rocm_ver_file
+      rocm_ver_file="$(cat /opt/rocm/.info/version 2>/dev/null || true)"
+      if [ -n "$rocm_ver_file" ]; then
+        ROCM_VERSION="${rocm_ver_file%%.*}.$(echo "$rocm_ver_file" | cut -d. -f2)"
+      fi
+    fi
+    if [ -z "$ROCM_VERSION" ]; then
+      ROCM_VERSION="6.2"
+    fi
+    log "Could not detect ROCm version from package manager, using: $ROCM_VERSION"
   fi
 }
 
@@ -170,7 +198,7 @@ ensure_dependencies() {
       fi
       ;;
     pacman)
-      local packages=(git python python-pip base-devel ffmpeg curl wget pkgconf libglvnd mesa libx11)
+      local packages=(git python python-pip base-devel ffmpeg curl wget pkgconf libglvnd mesa libx11 pciutils)
       for pkg in "${packages[@]}"; do
         if ! pacman -Q "$pkg" >/dev/null 2>&1; then
           missing+=("$pkg")
@@ -257,7 +285,7 @@ choose_gpu() {
       ;;
     amd)
       if command -v rocm-smi >/dev/null 2>&1; then
-        mapfile -t gpus < <(rocm-smi --showid --showproductname 2>/dev/null | sed -n 's/GPU\[\([0-9]*\)\].*:[[:space:]]*\(.*\)/\1: \2/p' || true)
+        mapfile -t gpus < <(rocm-smi --showid --showproductname 2>/dev/null | sed -n 's/GPU\[\([0-9]*\)\].*Device Name:[[:space:]]*\(.*\)/\1: \2/p' || true)
       fi
       ;;
   esac
