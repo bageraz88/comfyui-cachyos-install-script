@@ -32,6 +32,7 @@
 - [x] Install ROCm PyTorch from `download.pytorch.org/whl/rocm*`.
 - [x] Use `HIP_VISIBLE_DEVICES` in launcher for AMD; no GPU var for CPU mode.
 - [x] Handle apt/dnf ROCm deps with fallback instructions.
+- [x] Auto-detect installed ROCm version for matching PyTorch index.
 
 ### Desktop shortcut
 - [x] Create `comfyui.desktop` in `~/.local/share/applications/` after install.
@@ -42,4 +43,4 @@
 ## Notes
 - Prioritize a simple, reliable script for CachyOS/Arch and Ubuntu/Debian-style systems.
 - Keep the script interactive by default, but make automation possible with `--yes`.
-- ROCm version defaults to 6.3; override with `export ROCM_VERSION=6.2`.
+- ROCm version is auto-detected from installed packages; override with `export ROCM_VERSION=6.2`.

@@ -11,7 +11,7 @@ DRY_RUN=0
 RESET=0
 YES=0
 GPU_TYPE=""
-ROCM_VERSION="${ROCM_VERSION:-6.3}"
+ROCM_VERSION="${ROCM_VERSION:-}"
 CREATE_SHORTCUT=1
 
 usage() {
@@ -112,6 +112,33 @@ detect_gpu_type() {
     if lspci | grep -qiE "(vga|3d|display).*amd|advanced micro devices"; then
       GPU_TYPE="amd"
     fi
+  fi
+}
+
+detect_rocm_version() {
+  if [ -n "$ROCM_VERSION" ]; then
+    return
+  fi
+
+  local ver=""
+  case "$PKG_MGR" in
+    pacman)
+      ver="$(pacman -Q rocm-hip-sdk 2>/dev/null | awk '{print $2}')"
+      ;;
+    apt)
+      ver="$(dpkg -s rocm-dev 2>/dev/null | grep '^Version:' | awk '{print $2}')"
+      ;;
+    dnf)
+      ver="$(rpm -q rocm-dev --queryformat '%{VERSION}' 2>/dev/null)"
+      ;;
+  esac
+
+  if [ -n "$ver" ]; then
+    ROCM_VERSION="${ver%%.*}.$(echo "$ver" | cut -d. -f2)"
+    log "Detected ROCm version: $ROCM_VERSION"
+  else
+    ROCM_VERSION="6.3"
+    log "Could not detect ROCm version, using default: $ROCM_VERSION"
   fi
 }
 
@@ -461,6 +488,9 @@ main() {
   log "GPU selection: $GPU_SELECTION"
   choose_gpu
   ensure_dependencies
+  if [ "$GPU_TYPE" = "amd" ]; then
+    detect_rocm_version
+  fi
   prepare_install_dir
   clone_or_update_repo
   setup_virtualenv
